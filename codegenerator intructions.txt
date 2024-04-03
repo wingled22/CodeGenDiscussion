@@ -1,0 +1,18 @@
+Install this first on the cli
+	dotnet add package Microsoft.VisualStudio.Web.CodeGeneration.Design
+and install this on the Nuget
+	Microsoft.VisualStudio.Web.CodeGeneration.Design
+
+dotnet tool install --global dotnet-aspnet-codegenerator --version 7.0.3
+
+and then build
+
+Create an area:
+	dotnet-aspnet-codegenerator area Farmer
+
+to codegenerate the controller with views
+	dotnet aspnet-codegenerator controller -name ProductController -m Product -dc testContext -outDir Controllers --useDefaultLayout --referenceScriptLibraries
+
+	dotnet aspnet-codegenerator controller -name UserTypeController -m UserType -dc PelayoCoopContext -outDir Controllers --useDefaultLayout --referenceScriptLibraries
+
+	dotnet aspnet-codegenerator controller -name ClientController -m ClientInfo -dc PelayoCoopContext -outDir Controllers --useDefaultLayout --referenceScriptLibraries
