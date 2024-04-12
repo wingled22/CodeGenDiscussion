@@ -1,4 +1,4 @@
-@model IEnumerable<CodeGen.Entities.ClientInfo>
+@model IEnumerable<CodeGen.ViewModel.ClientInfoViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -58,7 +58,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.UserType)
+                @Html.DisplayFor(modelItem => item.UserTypeName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
