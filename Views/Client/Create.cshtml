@@ -1,4 +1,4 @@
-@model CodeGen.ViewModel.ClientInfoViewModel
+@model CodeGen.Entities.ClientInfo
 
 @{
     ViewData["Title"] = "Create";
@@ -14,7 +14,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="UserType" class="control-label"></label>
-                <input asp-for="UserType" class="form-control"  />
+                <input asp-for="UserType" class="form-control" />
                 <span asp-validation-for="UserType" class="text-danger"></span>
             </div>
             <div class="form-group">
