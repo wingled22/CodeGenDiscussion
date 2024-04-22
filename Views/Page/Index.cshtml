@@ -1,0 +1,29 @@
+<style>
+    .selected{
+        color: coral;
+        background: #d7e8aa;
+    }
+</style>
+
+<h1>Hello world</h1>
+<h1>Hello world</h1>
+<h1>Hello world</h1>
+<h1>Hello world</h1>
+
+<script src="~/lib/jquery/dist/jquery.js"></script>
+<script>
+    
+    $("h1").click(function(){
+        @* console.log(e); *@
+        //console.log("I was clicked..");
+
+        if( $(this).hasClass("selected") )
+        {
+            $(this).removeClass("selected");
+        }else{
+            $(this).addClass("selected");
+        }
+    })
+    
+</script>
+
