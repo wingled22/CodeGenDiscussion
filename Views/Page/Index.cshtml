@@ -1,29 +1,82 @@
 <style>
-    .selected{
+    .selected {
         color: coral;
         background: #d7e8aa;
     }
 </style>
 
-<h1>Hello world</h1>
-<h1>Hello world</h1>
-<h1>Hello world</h1>
-<h1>Hello world</h1>
 
+
+<div class="client-container d-flex flex-row flex-wrap">
+
+</div>
+
+<div class="btn btn-success append-button">
+    append card
+</div>
+
+
+<template class="client-card-template">
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">ID</h5>
+            <h6 class="card-subtitle mb-2 text-muted">Client Details</h6>
+            <p class="card-text firstname">Firstname</p>
+            <p class="card-text lastname">lastname</p>
+            <p class="card-text address">Address</p>
+            <a href="#" class="card-link">Another link</a>
+        </div>
+    </div>
+</template>
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
-    
-    $("h1").click(function(){
-        @* console.log(e); *@
-        //console.log("I was clicked..");
+    $(document).ready(function(){
+        $.ajax({
+            url: 'http://localhost:5093/ClientAPI/GetClients'
+        })
+        .done(function(result){
+            var template = document.querySelector(".client-card-template");
+            var parent = document.querySelector(".client-container");
+            result.forEach(function( res ){
 
-        if( $(this).hasClass("selected") )
-        {
-            $(this).removeClass("selected");
-        }else{
-            $(this).addClass("selected");
+                var clone  = template.content.cloneNode(true);
+                
+                clone.querySelector(".card-title").innerHTML = res.id;
+                clone.querySelector(".firstname").innerHTML = res.firstName;
+                clone.querySelector(".lastname").innerHTML = res.lastName;
+                clone.querySelector(".address").innerHTML = res.address;
+
+                parent.append(clone);
+
+            });
+
+            console.table(result);
+        })
+        .fail(function(result){
+            alert("nafail imong request");
+        }) ;
+
+        $(".append-button").click(function () {
+            var template = document.querySelector(".client-card-template");
+            var parent = document.querySelector(".client-container");
+            var clone = template.content.cloneNode(true);
+            parent.append(clone);
+        });
+
+
+    
+    });
+
+
+
+
+
+    @* $("h1").click(function () {
+        if ($(this).hasClass("selected")) {
+        $(this).removeClass("selected");
+        } else {
+        $(this).addClass("selected");
         }
-    })
-    
-</script>
+        }) *@
 
+</script>

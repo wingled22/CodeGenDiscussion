@@ -30,7 +30,6 @@ namespace CodeGen.Controllers
             try
             {
                 var clients = _context.ClientInfos.ToList();
-                throw new Exception("BURITTTT");
 
                 if (clients.Count == 0)
                     return Ok("No record found");
