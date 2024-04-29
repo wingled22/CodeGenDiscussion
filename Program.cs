@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<PelayoCoopContext>(option => option.UseSqlServer("Server=localhost;Database=PelayoCoop;User ID=SA;Password=VeryStr0ngP@ssw0rd;TrustServerCertificate=true;"));
+builder.Services.AddDbContext<PelayoCoopContext>(option => {
+    option.UseSqlite("Data Source = pelayoCoop.db");
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
