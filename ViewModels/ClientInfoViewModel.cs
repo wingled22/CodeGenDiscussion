@@ -9,44 +9,44 @@ namespace CodeGen.ViewModels
     public class ClientInfoViewModel
     {
         public int Id { get; set; }
-        [Required]
+        // [Required]
         public int? UserType { get; set; }
         public string UserTypeName { get; set; } = "";
 
-        [Required]
+        // [Required]
         public string? FirstName { get; set; }
 
-        [Required]
+        // [Required]
         public string? MiddleName { get; set; }
 
-        [Required]
+        // [Required]
         public string? LastName { get; set; }
 
-        [Required]
+        // [Required]
         public string? Address { get; set; }
 
-        [Required]
+        // [Required]
         public int? ZipCode { get; set; }
 
-        [Required]
+        // [Required]
         public DateTime? Birthdate { get; set; }
 
-        [Required]
+        // [Required]
         public int? Age { get; set; }
 
-        [Required]
+        // [Required]
         public string? NameOfFather { get; set; }
 
-        [Required]
+        // [Required]
         public string? NameOfmother { get; set; }
 
-        [Required]
+        // [Required]
         public string? CivilStatus { get; set; }
 
-        [Required]
+        // [Required]
         public string? Religion { get; set; }
 
-        [Required]
+        // [Required]
         public string? Occupation { get; set; }
     }
 }

@@ -46,10 +46,6 @@ namespace CodeGen.Controllers
             ).ToList();
 
             return View(clientInfos);   
-            
-            // return _context.ClientInfos != null ?
-            //             View(await _context.ClientInfos.ToListAsync()) :
-            //             Problem("Entity set 'PelayoCoopContext.ClientInfos'  is null.");
         }
 
         // GET: Client/Details/5
@@ -102,6 +98,7 @@ namespace CodeGen.Controllers
                 };
                 _context.ClientInfos.Add(c);
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
             return View(clientInfo);

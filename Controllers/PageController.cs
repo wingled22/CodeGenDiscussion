@@ -25,41 +25,8 @@ namespace CodeGen.Controllers
             return View();
         }
 
-        public IActionResult GetClients()
-        {
-            try
-            {
-                var clients = _context.ClientInfos.ToList();
 
-                if (clients.Count == 0)
-                    return Ok("No record found");
-
-                return Ok(clients);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest($"Somethings error on the backend {ex.Message}");
-            }
-        }
-
-        [HttpPost]
-        public IActionResult SaveClients(ClientInfo c)
-        {
-            try
-            {
-                _context.ClientInfos.Add(c);
-                var res = _context.SaveChanges();
-
-                if (c.Id != 0 || c.Id != null)
-                    return Ok("Saved Success");
-                else
-                    return Ok("Not Saved");
-            }
-            catch (Exception ex){
-                return BadRequest($"Error happened: {ex.Message}");
-            }
-        }
-
+        
 
 
     }

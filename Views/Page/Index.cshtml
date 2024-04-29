@@ -5,66 +5,169 @@
     }
 </style>
 
-
+<div class="btn btn-success append-button" data-bs-toggle="modal" data-bs-target="#addClientModal">
+    Add client
+</div>
 
 <div class="client-container d-flex flex-row flex-wrap">
 
 </div>
 
-<div class="btn btn-success append-button">
-    append card
+
+
+<div class="modal fade" id="addClientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Client</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addClientForm" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">FirstName</label>
+                        <input type="text" class="form-control" id="firstname">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Lastname</label>
+                        <input type="text" class="form-control" id="lastname">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" id="address" placeholder="1234 Main St">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="submitClient">Save changes</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
-<template class="client-card-template">
-    <div class="card" style="width: 18rem;">
-        <div class="card-body">
-            <h5 class="card-title">ID</h5>
-            <h6 class="card-subtitle mb-2 text-muted">Client Details</h6>
-            <p class="card-text firstname">Firstname</p>
-            <p class="card-text lastname">lastname</p>
-            <p class="card-text address">Address</p>
-            <a href="#" class="card-link">Another link</a>
+<div class="modal fade" id="updateClientModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Update Client</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="addClientForm" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">FirstName</label>
+                        <input type="text" class="form-control" id="updatefirstname">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Lastname</label>
+                        <input type="text" class="form-control" id="updatelastname">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" id="updateaddress" placeholder="1234 Main St">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary" id="submitClient">Save changes</button>
+            </div>
         </div>
     </div>
-</template>
+</div>
+
+
+@Html.Partial("ClientCardPartial")
+
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
-    $(document).ready(function(){
+
+    var clients ;
+
+    function load() {
         $.ajax({
-            url: 'http://localhost:5093/ClientAPI/GetClients'
+            url: 'http://localhost:5093/clientapi2/getallclients'
         })
-        .done(function(result){
-            var template = document.querySelector(".client-card-template");
-            var parent = document.querySelector(".client-container");
-            result.forEach(function( res ){
+            .done(function (result) {
+                clients = result;
+                var template = document.querySelector(".client-card-template");
+                var parent = document.querySelector(".client-container");
 
-                var clone  = template.content.cloneNode(true);
-                
-                clone.querySelector(".card-title").innerHTML = res.id;
-                clone.querySelector(".firstname").innerHTML = res.firstName;
-                clone.querySelector(".lastname").innerHTML = res.lastName;
-                clone.querySelector(".address").innerHTML = res.address;
+                parent.innerHTML = "";
+                result.forEach(function (res) {
 
-                parent.append(clone);
+                    var clone = template.content.cloneNode(true);
 
+                    clone.querySelector(".card-title").innerHTML = res.id;
+                    clone.querySelector(".firstname").innerHTML = res.firstName;
+                    clone.querySelector(".lastname").innerHTML = res.lastName;
+                    clone.querySelector(".address").innerHTML = res.address;
+                    clone.querySelector("a#updateButton").setAttribute("data-updateclient", res.id)
+
+                    parent.append(clone);
+
+                });
+
+                console.table(result);
+            })
+            .fail(function (result) {
+                alert("nafail imong request");
             });
 
-            console.table(result);
-        })
-        .fail(function(result){
-            alert("nafail imong request");
-        }) ;
 
-        $(".append-button").click(function () {
+    }
+    $(document).ready(function () {
+
+        load();
+
+        $("#submitClient").click(function (e) {
+            e.preventDefault();
+            var fnameValue = document.querySelector("input#firstname").value;
+            var lnameValue = document.querySelector("input#lastname").value;
+            var addressValue = document.querySelector("input#address").value;
+
+            $.ajax({
+                url: 'http://localhost:5093/clientapi2/createclient',
+                method: "POST",
+                data: {
+                    firstName: fnameValue,
+                    lastName: lnameValue,
+                    address: addressValue
+                }
+            })
+                .done(function(){
+                    load();
+                })
+                .fail(function(res){
+                    alert(res);
+                });
+        });
+
+        @* $("#updateButton").click(function(e){
+            e.preventDefault();
+            console.log($(this).attr())
+        }); *@
+
+        $(document).on("click" ,"#updateButton" , function(e){
+            e.preventDefault();
+            
+            console.log("Iwasclicked")
+
+            var selectedID = $(this).attr("data-updateclient");
+            console.log(selectedID);
+        })
+
+    @* $(".append-button").click(function () {
             var template = document.querySelector(".client-card-template");
             var parent = document.querySelector(".client-container");
             var clone = template.content.cloneNode(true);
             parent.append(clone);
-        });
+            }); *@
 
 
-    
+
     });
 
 
