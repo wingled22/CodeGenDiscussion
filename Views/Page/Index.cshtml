@@ -9,6 +9,10 @@
     Add client
 </div>
 
+<div class="btn btn-success delete-items">
+    Delete items id greater than 4
+</div>
+
 <div class="client-container d-flex flex-row flex-wrap">
 
 </div>
@@ -72,7 +76,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary" id="submitClient">Save changes</button>
+                <button type="submit" class="btn btn-primary" id="submitUpdateClient">Save changes</button>
             </div>
         </div>
     </div>
@@ -84,7 +88,8 @@
 <script src="~/lib/jquery/dist/jquery.js"></script>
 <script>
 
-    var clients ;
+    var clients;
+    var clientIdToUpdate;
 
     function load() {
         $.ajax({
@@ -104,7 +109,8 @@
                     clone.querySelector(".firstname").innerHTML = res.firstName;
                     clone.querySelector(".lastname").innerHTML = res.lastName;
                     clone.querySelector(".address").innerHTML = res.address;
-                    clone.querySelector("a#updateButton").setAttribute("data-updateclient", res.id)
+                    clone.querySelector("a#updateButton").setAttribute("data-clientid", res.id)
+                    clone.querySelector("a#updateButton").setAttribute("data-clientname", res.firstName)
 
                     parent.append(clone);
 
@@ -122,7 +128,7 @@
 
         load();
 
-        $("#submitClient").click(function (e) {
+        @* $("#submitClient").click(function (e) {
             e.preventDefault();
             var fnameValue = document.querySelector("input#firstname").value;
             var lnameValue = document.querySelector("input#lastname").value;
@@ -137,26 +143,77 @@
                     address: addressValue
                 }
             })
-                .done(function(){
-                    load();
-                })
-                .fail(function(res){
-                    alert(res);
-                });
-        });
-
-        @* $("#updateButton").click(function(e){
-            e.preventDefault();
-            console.log($(this).attr())
+            .done(function () {
+                load();
+            })
+            .fail(function (res) {
+                alert(res);
+            });
         }); *@
 
-        $(document).on("click" ,"#updateButton" , function(e){
+        $(".delete-items").click(function (e) {
             e.preventDefault();
-            
-            console.log("Iwasclicked")
 
-            var selectedID = $(this).attr("data-updateclient");
-            console.log(selectedID);
+            $.ajax({
+                url: 'http://localhost:5093/clientapi2/DeleteSomeClients',
+            })
+            .done(function () {
+                load();
+            })
+            .fail(function (res) {
+                alert(res);
+            });
+        });
+
+        $("#updateButton").click(function (e) {
+            e.preventDefault();
+
+            console.log("Iwasclicked")
+           
+        });
+
+        $("#submitUpdateClient").click(function (e) {
+            e.preventDefault();
+            var fnameValue = document.querySelector("input#updatefirstname").value;
+            var lnameValue = document.querySelector("input#updatelastname").value;
+            var addressValue = document.querySelector("input#updateaddress").value;
+
+            $.ajax({
+                url: 'http://localhost:5093/clientapi2/updateclient',
+                method: "POST",
+                data: {
+                    id : clientIdToUpdate,
+                    clientInfo : {
+                        id : clientIdToUpdate,
+                        FirstName: fnameValue,
+                        LastName: lnameValue,
+                        Address: addressValue
+                    }
+                }
+            })
+            .done(function () {
+                load();
+            })
+            .fail(function (res) {
+                alert(res);
+            });
+        });
+
+        $(document).on("click", "#updateButton", function (e) {
+            e.preventDefault();
+
+            console.log("Iwasclicked2222222")
+
+            var selectedID = $(this).attr("data-clientid");
+            clientIdToUpdate = selectedID;
+            $("#updatefirstname").val(clients[selectedID].firstName);
+            $("#updatelastname").val(clients[selectedID].lastName);
+            $("#updateaddress").val(clients[selectedID].address);
+
+            console.table(clients[selectedID]);
+
+
+
         })
 
     @* $(".append-button").click(function () {

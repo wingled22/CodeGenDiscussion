@@ -102,7 +102,7 @@ namespace CodeGen.Controllers
         
        
         [HttpPost]
-        public async Task<IActionResult> UpdateClient(int id,  ClientInfoViewModel clientInfo)
+        public async Task<IActionResult> UpdateClient(int id, ClientInfo clientInfo)
         {
             if (id != clientInfo.Id)
             {
@@ -111,40 +111,17 @@ namespace CodeGen.Controllers
 
             if (ModelState.IsValid)
             {
-                try
-                {
-                    var client  = await _context.ClientInfos.FirstOrDefaultAsync(x => x.Id == id);
-                    client.UserType = clientInfo.UserType;
+                    var client  = await _context.ClientInfos.FirstOrDefaultAsync(x => x.Id == clientInfo.Id);
                     client.FirstName = clientInfo.FirstName;
-                    client.MiddleName = clientInfo.MiddleName;
                     client.LastName = clientInfo.LastName;
                     client.Address = clientInfo.Address;
-                    client.ZipCode = clientInfo.ZipCode;
-                    client.Birthdate = clientInfo.Birthdate;
-                    client.Age = clientInfo.Age;
-                    client.NameOfFather = clientInfo.NameOfFather;
-                    client.NameOfmother = clientInfo.NameOfmother;
-                    client.CivilStatus = clientInfo.CivilStatus;
-                    client.Religion = clientInfo.Religion;
-                    client.Occupation = clientInfo.Occupation;
 
                     _context.Update(client);
                     await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ClientInfoExists(clientInfo.Id))
-                    {
-                        return BadRequest();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                
+                return Ok(clientInfo);
             }
-            return Ok(clientInfo);
+            return BadRequest("model sent not valid");
         }
 
         // POST: Client/Delete/5
@@ -165,6 +142,30 @@ namespace CodeGen.Controllers
             await _context.SaveChangesAsync();
             return Ok();
         }
+
+        public async Task<IActionResult> DeleteSomeClients(){
+
+            // List<ClientInfo> clients = new List<ClientInfo>();
+            // ClientInfo clientInfo1 = new ClientInfo();
+            // ClientInfo clientInfo2 = new ClientInfo();
+            // clients.Add(clientInfo1);
+            // clients.Add(clientInfo2);
+
+            // _context.ClientInfos.AddRange(clients);
+            // var add_res = _context.SaveChanges();
+
+
+
+            var clientInfos = await _context.ClientInfos.Where(x => x.Id > 4).ToListAsync();
+            _context.ClientInfos.RemoveRange(clientInfos);
+            var result = _context.SaveChanges();
+            
+            if(result == 0)
+                return BadRequest("Deletion of records turned out failed..");
+
+            return Ok();
+        }
+        
 
         private bool ClientInfoExists(int id)
         {
